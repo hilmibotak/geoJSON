@@ -9,25 +9,44 @@ mongoose.connect(process.env.MONGO_GEO)
     console.log('✅ Connected to MongoDB for seeding');
 
     const data = {
-      name: 'Jalur 1',
+      name: 'Jalan Ciwaruga Raya',
       geojson: {
-        type: 'Feature',
-        geometry: {
-          type: 'LineString',
-          coordinates: [
-            [107.142063, -6.999619],
-            [107.143158, -7.004297],
-            [107.144788, -7.009416]
-          ]
-        },
-        properties: {}
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {
+              name: 'Jalan Ciwaruga Raya',
+              description: 'Jalan utama di Desa Ciwaruga yang menghubungkan area pemukiman dan kampus.'
+            },
+            geometry: {
+              type: 'LineString',
+              coordinates: [
+                [107.5823468323728, -6.847346570080224],
+                [107.58099711537253, -6.8518769690889165],
+                [107.57979380436726, -6.853997730352253],
+                [107.57938228809576, -6.855368157480315],
+                [107.57872564996119, -6.856606485235137],
+                [107.57808186481836, -6.8579750173366625],
+                [107.57740543551864, -6.859536527191504],
+                [107.57673894678334, -6.860932283478485],
+                [107.57640654425052, -6.861594483074094],
+                [107.57613498435359, -6.862418364556397],
+                [107.57584723364408, -6.863049347452636],
+                [107.57559554838481, -6.863796918708804],
+                [107.57527980322749, -6.864297574485045],
+                [107.57449118897681, -6.865906357498996]
+              ]
+            }
+          }
+        ]
       }
     };
 
-    await Route.deleteMany();  // bersihin data lama
-    await Route.create(data);  // seed data baru
+    await Route.deleteMany();  // hapus data lama
+    await Route.create(data);  // tambahkan data baru
 
-    console.log('🌱 Seed data berhasil dimasukkan');
+    console.log('🌱 Seed data Jalan Ciwaruga Raya berhasil dimasukkan');
     mongoose.connection.close();
   })
   .catch(err => console.error(err));

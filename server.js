@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const Route = require('./models/routeModel');
+const Ciwaruga = require('./models/routeModel'); // model schema yang udah kamu ubah sebelumnya
 
 dotenv.config();
 const app = express();
@@ -23,41 +23,63 @@ mongoose.connection.on('error', (err) => {
   console.error('⚠️ Mongoose error event:', err);
 });
 
-// 📝 CREATE
-app.post('/api/routes', async (req, res) => {
+// =======================================
+// 🗺️ ROUTER DESA CIWARUGA
+// =======================================
+
+// 📝 CREATE (Tambah data GeoJSON Desa Ciwaruga)
+app.post('/api/ciwaruga', async (req, res) => {
   try {
-    const newRoute = await Route.create(req.body);
-    res.json(newRoute);
+    const newData = await Ciwaruga.create(req.body);
+    res.json(newData);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-// 📜 READ ALL
-app.get('/api/routes', async (req, res) => {
-  const routes = await Route.find();
-  res.json(routes);
+// 📜 READ ALL (Ambil semua data GeoJSON Ciwaruga)
+app.get('/api/ciwaruga', async (req, res) => {
+  try {
+    const data = await Ciwaruga.find();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
-// 🔍 READ BY ID
-app.get('/api/routes/:id', async (req, res) => {
-  const route = await Route.findById(req.params.id);
-  if (!route) return res.status(404).json({ message: 'Data tidak ditemukan' });
-  res.json(route);
+// 🔍 READ BY ID (Ambil satu data berdasarkan ID)
+app.get('/api/ciwaruga/:id', async (req, res) => {
+  try {
+    const data = await Ciwaruga.findById(req.params.id);
+    if (!data) return res.status(404).json({ message: 'Data Ciwaruga tidak ditemukan' });
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
-// ✏️ UPDATE
-app.put('/api/routes/:id', async (req, res) => {
-  const updated = await Route.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  res.json(updated);
+// ✏️ UPDATE (Edit data GeoJSON berdasarkan ID)
+app.put('/api/ciwaruga/:id', async (req, res) => {
+  try {
+    const updated = await Ciwaruga.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
-// 🗑️ DELETE
-app.delete('/api/routes/:id', async (req, res) => {
-  await Route.findByIdAndDelete(req.params.id);
-  res.json({ message: 'Data berhasil dihapus' });
+// 🗑️ DELETE (Hapus data GeoJSON)
+app.delete('/api/ciwaruga/:id', async (req, res) => {
+  try {
+    await Ciwaruga.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Data Desa Ciwaruga berhasil dihapus' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
+// =======================================
 // 🟢 START SERVER
+// =======================================
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server Desa Ciwaruga berjalan di port ${PORT}`));
